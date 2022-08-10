@@ -1,1 +1,0 @@
-# terraform_elk_aws
