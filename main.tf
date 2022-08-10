@@ -81,7 +81,7 @@ resource "aws_instance" "elk_master" {
   key_name               = aws_key_pair.elk_auth.id
   vpc_security_group_ids = [aws_security_group.elk_sg.id]
   subnet_id              = aws_subnet.elk_public_subnet.id
-  user_data              = file("userdata.tpl")
+  #user_data              = file("userdata.tpl")
   root_block_device {
     volume_size = 30
   }
@@ -113,7 +113,7 @@ resource "aws_instance" "elk_node1" {
   key_name               = aws_key_pair.elk_auth.id
   vpc_security_group_ids = [aws_security_group.elk_sg.id]
   subnet_id              = aws_subnet.elk_public_subnet.id
-  user_data              = file("userdata.tpl")
+  #user_data              = file("userdata.tpl")
   root_block_device {
     volume_size = 80
   }
@@ -138,7 +138,7 @@ resource "aws_volume_attachment" "elk_data_vol_attach_node1" {
   instance_id = aws_instance.elk_node1.id
 }
 
-
+/*
 //  Elastic node 2
 resource "aws_instance" "elk_node2" {
   instance_type          = "r5a.xlarge"
@@ -146,7 +146,7 @@ resource "aws_instance" "elk_node2" {
   key_name               = aws_key_pair.elk_auth.id
   vpc_security_group_ids = [aws_security_group.elk_sg.id]
   subnet_id              = aws_subnet.elk_public_subnet.id
-  user_data              = file("userdata.tpl")
+  #user_data              = file("userdata.tpl")
   root_block_device {
     volume_size = 80
   }
@@ -179,7 +179,7 @@ resource "aws_instance" "elk_node3" {
   key_name               = aws_key_pair.elk_auth.id
   vpc_security_group_ids = [aws_security_group.elk_sg.id]
   subnet_id              = aws_subnet.elk_public_subnet.id
-  user_data              = file("userdata.tpl")
+  //user_data              = file("userdata.tpl")
   root_block_device {
     volume_size = 80
   }
@@ -212,7 +212,7 @@ resource "aws_instance" "elk_node4" {
   key_name               = aws_key_pair.elk_auth.id
   vpc_security_group_ids = [aws_security_group.elk_sg.id]
   subnet_id              = aws_subnet.elk_public_subnet.id
-  user_data              = file("userdata.tpl")
+  //user_data              = file("userdata.tpl")
   root_block_device {
     volume_size = 80
   }
@@ -245,7 +245,7 @@ resource "aws_instance" "elk_node5" {
   key_name               = aws_key_pair.elk_auth.id
   vpc_security_group_ids = [aws_security_group.elk_sg.id]
   subnet_id              = aws_subnet.elk_public_subnet.id
-  user_data              = file("userdata.tpl")
+  //user_data              = file("userdata.tpl")
   root_block_device {
     volume_size = 80
   }
@@ -278,7 +278,7 @@ resource "aws_instance" "elk_node6" {
   key_name               = aws_key_pair.elk_auth.id
   vpc_security_group_ids = [aws_security_group.elk_sg.id]
   subnet_id              = aws_subnet.elk_public_subnet.id
-  user_data              = file("userdata.tpl")
+  #user_data              = file("userdata.tpl")
   root_block_device {
     volume_size = 80
   }
@@ -311,7 +311,7 @@ resource "aws_instance" "elk_node7" {
   key_name               = aws_key_pair.elk_auth.id
   vpc_security_group_ids = [aws_security_group.elk_sg.id]
   subnet_id              = aws_subnet.elk_public_subnet.id
-  user_data              = file("userdata.tpl")
+  #user_data              = file("userdata.tpl")
   root_block_device {
     volume_size = 80
   }
@@ -344,7 +344,7 @@ resource "aws_instance" "elk_node8" {
   key_name               = aws_key_pair.elk_auth.id
   vpc_security_group_ids = [aws_security_group.elk_sg.id]
   subnet_id              = aws_subnet.elk_public_subnet.id
-  user_data              = file("userdata.tpl")
+  #user_data              = file("userdata.tpl")
   root_block_device {
     volume_size = 80
   }
@@ -377,7 +377,7 @@ resource "aws_instance" "elk_node9" {
   key_name               = aws_key_pair.elk_auth.id
   vpc_security_group_ids = [aws_security_group.elk_sg.id]
   subnet_id              = aws_subnet.elk_public_subnet.id
-  user_data              = file("userdata.tpl")
+  #user_data              = file("userdata.tpl")
   root_block_device {
     volume_size = 80
   }
@@ -410,7 +410,7 @@ resource "aws_instance" "elk_node10" {
   key_name               = aws_key_pair.elk_auth.id
   vpc_security_group_ids = [aws_security_group.elk_sg.id]
   subnet_id              = aws_subnet.elk_public_subnet.id
-  user_data              = file("userdata.tpl")
+  #user_data              = file("userdata.tpl")
   root_block_device {
     volume_size = 80
   }
@@ -435,3 +435,31 @@ resource "aws_volume_attachment" "elk_data_vol_attach_node10" {
   instance_id = aws_instance.elk_node10.id
 }
 
+
+resource "aws_s3_bucket" "elkbucket" {
+  bucket = "901-elk-bucket"
+  acl    = "private"
+
+  tags = {
+    Name        = "Elastic Search Bucket"
+    Environment = "Prod"
+  }
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "bucket-config" {
+  bucket = aws_s3_bucket.elkbucket.bucket
+
+  rule {
+    id = "MoveToGlacier"
+
+
+    status = "Enabled"
+
+    transition {
+      days          = 1
+      storage_class = "GLACIER"
+    }
+
+  }
+}
+*/
